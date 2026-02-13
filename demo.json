@@ -1,0 +1,60 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "A sample CloudFormation template for an EC2 Instance with parameters for reusability.",
+  "Parameters": {
+    "ImageId": {
+      "Description": "The AMI ID for the EC2 instance (e.g., an Amazon Linux AMI).",
+      "Type": "String",
+      "Default": "ami-0ced6a024bb18ff2e"
+    },
+    "InstanceType": {
+      "Description": "The EC2 instance type (e.g., t2.micro).",
+      "Type": "String",
+      "Default": "t3.micro"
+    },
+    "KeyName": {
+      "Description": "The name of an existing EC2 KeyPair to enable SSH access.",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "Must be the name of an existing EC2 KeyPair."
+    }
+  },
+  "Resources": {
+    "MyEC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "CloudFormation-EC2-Instance"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "PublicIp": {
+      "Description": "Public IP address of the newly created EC2 instance",
+      "Value": {
+        "Fn::GetAtt": [
+          "MyEC2Instance",
+          "PublicIp"
+        ]
+      }
+    },
+    "InstanceId": {
+      "Description": "Instance ID of the newly created EC2 instance",
+      "Value": {
+        "Ref": "MyEC2Instance"
+      }
+    }
+  }
+}
